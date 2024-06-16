@@ -3,9 +3,9 @@ const video = player.querySelector('.video');
 const progressBar = player.querySelector('.progress_filled');
 const progress =player.querySelector('.progress')
 const playButton = player.querySelector('.playButton');
-const playCentral = player.querySelector('.central');
+const playCentral = player.querySelector('.central-button-outer');
 const backButton = player.querySelector('.backButton');
-const fowardButton = player.querySelector('.forwardButton');
+const forwardButton = player.querySelector('.forwardButton');
 const volumeSlider = player.querySelector('.volumeSlider')
 const volumeButton = player.querySelector('.volumeButton')
 const volumeIcon = document.getElementById('volumeIcon')
@@ -13,19 +13,19 @@ const playIcon = document.getElementById('playIcon')
 const fullScreenButton = player.querySelector('.fullScreenButton')
 
 
-     
+
 //PLAY
 function play() {
     const method = video.paused ? 'play' : 'pause';
     video[method]();
-    
+
     if (video.paused){
-        playCentral.style.zIndex = '10';
+        playCentral.style.visibility = 'visible';
         playIcon.src = 'svg/play.svg';
 
     }
     else {
-       playCentral.style.zIndex = '0';
+       playCentral.style.visibility = 'hidden';
        playIcon.src = 'svg/pause.svg';
     }
 }
@@ -41,13 +41,13 @@ function forward() {
     video.currentTime += 2;
 }
 backButton.addEventListener('click', back);
-fowardButton.addEventListener('click', forward);
+forwardButton.addEventListener('click', forward);
 
 //PROGRESS
 function progressFunc() {
   progressBar.style.flexBasis = `${(video.currentTime / video.duration) * 100}%`;
   if (video.currentTime === video.duration) {
-    playIcon.src = 'svg/play.svg'; 
+    playIcon.src = 'svg/play.svg';
 }
 }
 function move(e) {
@@ -71,7 +71,7 @@ if (video.volume > 0){
     video.volume = prevVolume;
     volumeIcon.src = 'svg/volume.svg'
 }
-    
+
 }
 volumeButton.addEventListener('click', noVolume)
 //VOLUME
@@ -82,13 +82,13 @@ function levelChange() {
     } else {
         volumeIcon.src = 'svg/volume.svg'
     }
-    
+
 }
 volumeSlider.addEventListener('change', levelChange);
 volumeSlider.addEventListener('mousemove', levelChange);
 
 //FULLSCREEN
-//player.webkitRequestFullscreen(); 
+//player.webkitRequestFullscreen();
 
 function fullscreen (){
     if (document.webkitFullscreenElement && document.webkitFullscreenElement.nodeName == 'VIDEO') {
@@ -97,33 +97,27 @@ function fullscreen (){
         video.exitFullScreen();
     }else if (document.mozFullscreenElement && document.mozFullscreenElement.nodeName == 'VIDEO') {
         video.mozExitFullScreen();
-    
-
-
    }else{
     if(video.requestFullscreen) {
-        //console.log('a');
       video.requestFullscreen();
     } else if(video.webkitRequestFullscreen) {
-        //console.log('b');
       video.webkitRequestFullscreen();
     } else if(video.mozRequestFullscreen) {
-        //console.log('c');
       video.mozRequestFullScreen();
-    } 
+    }
 }
-    
+
 }
-   
-   
+
+
 fullScreenButton.addEventListener('click', fullscreen);
 //fullScreenButton.addEventListener('click', fullscreen(video.src))
 
 //KEYBOARD
 function keyboard(e){
-    
+
     e.preventDefault() //default disable
-    
+
     switch (e.keyCode){
         case 32: //' '
             play();
@@ -136,7 +130,7 @@ function keyboard(e){
             break;
         case 76: //l
             forward();
-            break;  
+            break;
         case 74: //j
             back();
             break;
@@ -145,21 +139,19 @@ function keyboard(e){
             fullscreen ();
             break;
         case 190: //>
-            if (event.shiftKey && video.playbackRate < 2) {
+            if (e.shiftKey && video.playbackRate < 2) {
                 video.playbackRate += 0.25;
-                //console.log(video.playbackRate);
             }
             break;
         case 188: //<
-            if (event.shiftKey && video.playbackRate >0) {
+            if (e.shiftKey && video.playbackRate >0) {
                 video.playbackRate -= 0.25;
-                //console.log(video.playbackRate);
             }
             break;
-        case 48: //0   
+        case 48: //0
             video.currentTime = 0;
             break;
-        case 49:  //1  
+        case 49:  //1
             video.currentTime = 0.1 * video.duration;
             break;
         case 50: //2
@@ -187,8 +179,6 @@ function keyboard(e){
             video.currentTime = 0.9 * video.duration;
             break;
     }
-    
+
 }
 window.addEventListener("keydown", keyboard);
-
-console.log ('30/30: реализован функционал плеера, добавлены обязательные клавиши управления с клавиатуры, а также 13 клавиш YouTube: j,k,l,0,1,2,3,4,5,6,7,8,9')
